@@ -1,0 +1,59 @@
+
+
+/* Color picker 
+#9B4444
+#C68484
+#A3C9AA
+#EEEEEE */
+
+body {
+    /* background-color: #C5FF95; */
+}
+
+
+.nav-item {
+    /* background-color: #A3C9AA; */
+}
+
+.gradient-background {
+    /* background: linear-gradient(300deg, #9B4444, #C68484, #9B4444); */
+    background: linear-gradient(300deg, #44519b, #8496c6, #44639b);
+    background-size: 180% 180%;
+    animation: gradient-animation 18s ease infinite;
+  }
+
+.nav-color {
+    color: white;
+    --bs-nav-link-hover-color: #95d8ff;
+}
+
+.btn-light {
+    
+}
+
+
+
+#title_photo{
+    /* height: 45rem;
+    width: auto; */
+}
+
+.name-title {
+    font-size: 4rem;
+    color: white;
+}
+
+.waterfall-regular {
+    font-family: "Waterfall", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 7rem;
+  }
+  
+.name-desc {
+    color: white;
+}
+
+.nav-btn {
+
+}
