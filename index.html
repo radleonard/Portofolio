@@ -3,667 +3,1043 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoresheet Lomba Wiruk - TAPA</title>
-    <!-- FontAwesome & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>WIRUK - TAPA 2026</title>
+    <!-- Library html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-gold: #f59e0b;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --border: rgba(255, 255, 255, 0.1);
+            --bg-color: #f0f4f8;
+            --primary-navy: #1e293b;
+            --accent-teal: #00a896;
+            --accent-blue: #028090;
+            --accent-orange: #f77f00;
+            --accent-yellow: #ffb703;
+            --accent-pink: #e63946;
+            --accent-green: #2ba84a;
+            --text-dark: #334155;
+            --card-bg: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
-            color: var(--text-main);
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: var(--bg-color); 
+            color: var(--text-dark); 
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
         }
 
-        .container {
+        .container { 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            flex: 1; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+
+        /* Keyframes Animation Gradient */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Setup Screen */
+        .setup-wrapper {
+            max-width: 550px;
+            margin: 30px auto 15px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-top: 6px solid var(--accent-teal);
+        }
+
+        .setup-header { text-align: center; margin-bottom: 25px; }
+        .setup-header img { max-height: 85px; margin-bottom: 12px; }
+        .setup-header h2 { margin: 0; color: var(--primary-navy); font-size: 22px; font-weight: 700; }
+        .setup-header p { margin: 5px 0 0 0; color: #64748b; font-size: 13px; }
+
+        .form-group-setup { margin-bottom: 18px; }
+        .form-group-setup label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; color: var(--primary-navy); }
+        .form-group-setup input, .form-group-setup select {
             width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Header section */
-        header {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand i {
-            font-size: 28px;
-            color: var(--accent-gold);
-        }
-
-        .brand-text h1 {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-text p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Badges Area */
-        .header-badges {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 9999px;
-            font-size: 12px;
-            font-weight: 600;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        /* Badge Juri */
-        .badge-juri {
-            background: rgba(79, 70, 229, 0.2);
-            color: #818cf8;
-            border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        /* Badge Edit Status */
-        .badge-edit {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .badge-edit.saved {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        /* Badge Leonard Raditya */
-        .badge-leonard {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2));
-            color: #f472b6;
-            border-color: rgba(236, 72, 153, 0.3);
-            font-weight: 700;
-        }
-
-        /* Cards Layout */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .form-control {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
+            padding: 12px;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
-            padding: 10px 14px;
-            color: #fff;
             font-size: 14px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        .form-group-setup input:focus, .form-group-setup select:focus {
+            border-color: var(--accent-teal);
             outline: none;
-            transition: all 0.2s;
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
         }
 
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        .paroki-list-setup {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
         }
+        .paroki-list-setup label { font-weight: 700; font-size: 14px; color: var(--primary-navy); display: block; margin-bottom: 10px; }
+        .input-paroki-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .input-paroki-item span { font-weight: bold; width: 20px; color: var(--accent-orange); }
+        .input-paroki-item input { margin-bottom: 0; }
 
-        /* Live Stopwatch Utama Section */
-        .stopwatch-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .stopwatch-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 60%);
-            animation: pulse-bg 4s infinite alternate ease-in-out;
-            pointer-events: none;
-        }
-
-        @keyframes pulse-bg {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            100% { transform: scale(1.05); opacity: 1; }
-        }
-
-        .stopwatch-display {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .timer-time {
-            font-size: 54px;
-            font-weight: 800;
-            font-family: monospace;
-            letter-spacing: 2px;
-            color: var(--accent-gold);
-            text-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-            margin: 10px 0;
-        }
-
-        .stopwatch-controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-start { background: var(--accent-green); color: #fff; }
-        .btn-start:hover { background: #059669; }
-
-        .btn-stop { background: var(--accent-red); color: #fff; }
-        .btn-stop:hover { background: #dc2626; }
-
-        .btn-reset { background: rgba(148, 163, 184, 0.2); color: var(--text-main); }
-        .btn-reset:hover { background: rgba(148, 163, 184, 0.3); }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--primary), #6366f1);
-            color: #fff;
+        .btn-start {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
             font-size: 16px;
-            justify-content: center;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 168, 150, 0.3);
+            transition: 0.3s;
         }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 168, 150, 0.4); }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
-        }
-
-        .score-total-card {
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.15));
-            border: 1px solid rgba(79, 70, 229, 0.4);
+        .setup-copyright {
             text-align: center;
-            padding: 24px;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 15px;
+        }
+        .setup-copyright span { color: var(--accent-pink); }
+        .setup-copyright strong { color: var(--primary-navy); }
+
+        /* Scoresheet Screen */
+        .scoresheet-wrapper { display: none; }
+
+        /* Animated Header Box */
+        .header-box { 
+            background: linear-gradient(300deg, #ed7600, #018651, #fbfd50, #25b5e9);
+            background-size: 180% 180%;
+            animation: gradient-animation 18s ease infinite;
+            color: #ffffff; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { max-height: 65px; background: white; padding: 4px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+        
+        /* Updated Cheerful Badge & Edit Button */
+        .juri-badge { 
+            background: rgba(255, 255, 255, 0.92); 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: #7c2d12; 
+            display: inline-block; 
+            margin-top: 5px; 
+            text-shadow: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .juri-badge span { color: #ea580c; }
+
+        .btn-edit-setup { 
+            background: #ffffff; 
+            color: #0f766e; 
+            border: none; 
+            padding: 9px 16px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            text-shadow: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+        .btn-edit-setup:hover { 
+            background: #f8fafc; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(0,0,0,0.18);
         }
 
-        .total-score-val {
-            font-size: 48px;
-            font-weight: 800;
-            color: #67e8f9;
-            text-shadow: 0 0 15px rgba(103, 232, 249, 0.4);
+        /* Navigasi Babak */
+        .tab-navigation { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab-btn { 
+            padding: 12px 16px; 
+            background: #e2e8f0; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            color: #64748b; 
+            cursor: pointer; 
+            font-size: 14px; 
+            flex: 1; 
+            transition: 0.3s;
+        }
+        .tab-btn.active { 
+            background: var(--accent-teal); 
+            color: white; 
+            box-shadow: 0 4px 10px rgba(0, 168, 150, 0.25);
         }
 
-        /* Footer & Social Icons */
-        footer {
-            margin-top: 10px;
-            padding: 20px 0;
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Cards Penilaian */
+        .grid-penilaian { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+        .card-babak { background: white; padding: 18px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-top: 4px solid var(--accent-blue); }
+        .card-header { font-size: 15px; font-weight: 700; color: var(--primary-navy); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; }
+        
+        .card-section-top { margin-bottom: 12px; }
+        .card-section-bottom { background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .section-subtitle { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .section-divider { border: 0; height: 1px; background: #e2e8f0; margin: 12px 0; }
+
+        /* Rebutan & Counter Buttons */
+        .btn-rebutan-benar {
+            width: 100%;
+            padding: 10px;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            color: #64748b;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .btn-rebutan-benar.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+            box-shadow: 0 3px 8px rgba(43, 168, 74, 0.3);
+        }
+
+        .pelanggaran-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-pink);
+        }
+        .counter-group { display: flex; align-items: center; gap: 6px; }
+        .btn-counter {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: var(--primary-navy);
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-counter:active { transform: scale(0.9); }
+        .counter-value { font-size: 13px; font-weight: 800; min-width: 18px; text-align: center; color: var(--primary-navy); }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+        .form-group label span { color: var(--accent-teal); font-weight: bold; }
+        
+        input[type="range"] { 
+            width: 100%; 
+            accent-color: var(--accent-teal); 
+            cursor: pointer; 
+        }
+
+        /* Submit Button */
+        .submit-container { text-align: center; margin: 30px 0; }
+        .btn-submit { 
+            padding: 16px 40px; 
+            background: linear-gradient(135deg, var(--accent-pink), #c0392b); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.35); 
+            transition: 0.3s; 
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230, 57, 70, 0.45); }
+
+        /* Hasil Rekapitulasi Table */
+        .hasil-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; margin-top: 20px; border-left: 6px solid var(--accent-teal); }
+        .table-container-capture { background: white; padding: 15px; border-radius: 8px; }
+        .table-hasil { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .table-hasil th, .table-hasil td { border: 1px solid #cbd5e1; padding: 10px; text-align: center; }
+        .table-hasil th { background-color: #f1f5f9; font-weight: 700; color: var(--primary-navy); }
+        .rank-1 { background-color: #e6fffa; font-weight: bold; }
+
+        /* Action Buttons */
+        .action-rekap-box {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-action-download {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-action-wa {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Updated Animated Main Footer */
+        .main-footer {
+            margin-top: 35px;
+            background: linear-gradient(300deg, #ed7600, #25b5e9, #018651, #fbfd50);
+            background-size: 180% 180%;
+            animation: gradient-animation 18s ease infinite;
+            color: #ffffff;
+            padding: 16px 22px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            box-sizing: border-box;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+        .footer-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            border-top: 1px solid var(--border);
+            gap: 12px;
         }
-
-        .social-links {
-            display: flex;
-            gap: 14px;
+        .footer-links { 
+            display: flex; 
+            gap: 14px; 
+            align-items: center; 
         }
-
-        .social-icon {
+        
+        /* Bright Cheerful Footer Icons */
+        .footer-icon-link {
+            color: #ea580c; 
+            font-size: 20px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: #ffffff;
+            text-shadow: none;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        .footer-icon-link:hover {
+            color: #dc2626;
+            background: #fef08a;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
         }
 
-        .social-icon.ig:hover {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: #fff;
-            border-color: transparent;
-            transform: translateY(-3px);
+        /* Bright Cheerful Footer Credit Badge */
+        .footer-credit { 
+            color: #ffffff; 
+            font-weight: 600; 
+            font-size: 13px;
+        }
+        .footer-credit span { color: #ffffff; }
+        .footer-credit strong { 
+            background: #ffffff; 
+            padding: 5px 12px; 
+            border-radius: 8px; 
+            color: #1e293b;
+            font-weight: 700;
+            text-shadow: none;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            display: inline-block;
+            margin-left: 3px;
         }
 
-        .social-icon.wa:hover {
-            background: #25d366;
-            color: #fff;
-            border-color: transparent;
-            transform: translateY(-3px);
-        }
-
-        /* Toast Alert */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            background: #1e293b;
-            color: #fff;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 1000;
+        @media (max-width: 600px) {
+            .footer-container { 
+                flex-direction: column; 
+                text-align: center; 
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Header -->
-    <header>
-        <div class="brand">
-            <i class="fa-solid fa-fire-flame-curved"></i>
-            <div class="brand-text">
-                <h1>SCORESHEET LOMBA WIRUK</h1>
-                <p>TAPA Digital Scoring System</p>
-            </div>
-        </div>
 
-        <!-- Badges Area -->
-        <div class="header-badges">
-            <span class="badge badge-juri" id="badgeJuri">
-                <i class="fa-solid fa-user-check"></i> Juri: <span id="textNamaJuri">Belum Dipilih</span>
-            </span>
-            <span class="badge badge-edit" id="badgeEdit">
-                <i class="fa-solid fa-pen-to-square"></i> Mode Edit
-            </span>
-            <span class="badge badge-leonard">
-                <i class="fa-solid fa-award"></i> Leonard Raditya
-            </span>
-        </div>
-    </header>
-
-    <form id="scoresheetForm">
-        <!-- Informasi Juri & Peserta -->
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-clipboard-user"></i> Informasi Juri & Peserta
+    <!-- SETUP SCREEN -->
+    <div id="screen-setup">
+        <div class="setup-wrapper">
+            <div class="setup-header">
+                <img src="logo.png" alt="Logo TAPA 2026" onerror="this.style.display='none'">
+                <h2>SCORESHEET LOMBA WIRUK</h2>
+                <p>TAPA 2026 - Silakan Masukkan Data Juri & Peserta</p>
             </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="selectJuri">Nama Juri</label>
-                    <select id="selectJuri" class="form-control" required>
-                        <option value="">-- Pilih Juri --</option>
-                        <option value="Juri 1">Juri 1</option>
-                        <option value="Juri 2">Juri 2</option>
-                        <option value="Juri 3">Juri 3</option>
-                        <option value="Juri Utama">Juri Utama</option>
+
+            <form id="form-setup" onsubmit="simpanDataDanMulai(event)">
+                <div class="form-group-setup">
+                    <label for="input_nama_juri">👤 Nama Lengkap Juri:</label>
+                    <input type="text" id="input_nama_juri" placeholder="Contoh: Fr. Yohanes" required>
+                </div>
+
+                <div class="form-group-setup">
+                    <label for="input_jumlah_paroki">👥 Jumlah Paroki yang Tampil:</label>
+                    <select id="input_jumlah_paroki" onchange="toggleInputParoki()">
+                        <option value="3">3 Paroki</option>
+                        <option value="4" selected>4 Paroki</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="namaParoki">Nama Paroki / Peserta</label>
-                    <input type="text" id="namaParoki" class="form-control" placeholder="Masukkan nama paroki..." required>
+
+                <div class="paroki-list-setup">
+                    <label>🏛️ Urutkan Paroki Peserta dari Paling Kiri:</label>
+                    <div class="input-paroki-item">
+                        <span>1.</span>
+                        <input type="text" id="input_p1" value="Paroki A" placeholder="Nama Paroki 1" required>
+                    </div>
+                    <div class="input-paroki-item">
+                        <span>2.</span>
+                        <input type="text" id="input_p2" value="Paroki B" placeholder="Nama Paroki 2" required>
+                    </div>
+                    <div class="input-paroki-item">
+                        <span>3.</span>
+                        <input type="text" id="input_p3" value="Paroki C" placeholder="Nama Paroki 3" required>
+                    </div>
+                    <div class="input-paroki-item" id="box_input_p4">
+                        <span>4.</span>
+                        <input type="text" id="input_p4" value="Paroki D" placeholder="Nama Paroki 4" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="noUrut">Nomor Urut Tampil</label>
-                    <input type="number" id="noUrut" class="form-control" min="1" placeholder="cth: 01">
+
+                <button type="submit" class="btn-start">MASUK KE SCORESHEET ➔</button>
+            </form>
+        </div>
+
+        <div class="setup-copyright">
+            © 2026 TAPA - by <strong>Leonard Raditya</strong>
+        </div>
+    </div>
+
+    <!-- SCORESHEET SCREEN -->
+    <div id="screen-scoresheet" class="scoresheet-wrapper">
+        <div class="header-box">
+            <div class="header-left">
+                <img src="logo.png" alt="Logo TAPA 2026" class="header-logo" onerror="this.style.display='none'">
+                <div>
+                    <h3 style="margin: 0; font-size: 18px;">SCORESHEET PENILAIAN WIRUK</h3>
+                    <div class="juri-badge">👤 Juri: <span id="display_juri_name">-</span></div>
                 </div>
+            </div>
+            <button class="btn-edit-setup" onclick="kembaliKeSetup()">⚙️ Edit Data</button>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="bukaBabak(this, 'babak1')">BABAK I: Tanya Jawab & Rebutan</button>
+            <button class="tab-btn" onclick="bukaBabak(this, 'babak2')">BABAK II: Pembakaran Bara</button>
+            <button class="tab-btn" onclick="bukaBabak(this, 'babak3')">BABAK III: Praktek Pendupaan</button>
+        </div>
+
+        <!-- BABAK I -->
+        <div id="babak1" class="tab-content active">
+            <div class="grid-penilaian">
+                <script>
+                    for(let i=1; i<=4; i++) {
+                        document.write(`
+                            <div class="card-babak card-p-${i}">
+                                <div class="card-header"><span class="txt-nama-${i}">Paroki ${i}</span></div>
+                                
+                                <div class="card-section-top">
+                                    <div class="section-subtitle">🥣 Bagian 1: Soal Bowl / Experience</div>
+                                    <div class="form-group">
+                                        <label>Tingkat Penilaian <span id="val_bowl_${i}">50</span></label>
+                                        <input type="range" id="bowl_${i}" min="0" max="100" value="50" oninput="document.getElementById('val_bowl_${i}').innerText=this.value">
+                                    </div>
+                                </div>
+
+                                <hr class="section-divider">
+
+                                <div class="card-section-bottom">
+                                    <div class="section-subtitle">⚡ Bagian 2: Sesi Rebutan</div>
+                                    
+                                    <button type="button" id="btn_rebutan_${i}" class="btn-rebutan-benar" onclick="toggleRebutanBenar(${i})">
+                                        <span id="icon_rebutan_${i}">◯</span> Jawaban Benar
+                                    </button>
+
+                                    <div class="pelanggaran-box">
+                                        <span>Pelanggaran (-10/x):</span>
+                                        <div class="counter-group">
+                                            <button type="button" class="btn-counter" onclick="ubahPelanggaran(${i}, -1)">-</button>
+                                            <span id="val_pelanggaran_${i}" class="counter-value">0</span>
+                                            <button type="button" class="btn-counter" onclick="ubahPelanggaran(${i}, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    }
+                </script>
             </div>
         </div>
 
-        <!-- Babak 1 -->
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-bowl-food"></i> Babak 1: Wiruk Bowl & Teori
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="skorBowl">Skor Bowl (0-100)</label>
-                    <input type="number" id="skorBowl" class="form-control score-input" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="skorRebutan">Bonus Rebutan (+)</label>
-                    <input type="number" id="skorRebutan" class="form-control score-input" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="pelanggaran">Penalti Pelanggaran (-)</label>
-                    <input type="number" id="pelanggaran" class="form-control score-input" value="0">
-                </div>
-            </div>
-        </div>
-
-        <!-- Babak 2: Live Stopwatch Utama -->
-        <div class="card stopwatch-card">
-            <div class="card-title" style="border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
-                <i class="fa-solid fa-stopwatch" style="color: var(--accent-gold);"></i> Live Stopwatch Utama (Babak Bara & Waktu)
-            </div>
-            <div class="stopwatch-display">
-                <div class="timer-time" id="stopwatchDisplay">00:00.0</div>
-                <div class="stopwatch-controls">
-                    <button type="button" class="btn btn-start" id="btnStartTimer"><i class="fa-solid fa-play"></i> Start</button>
-                    <button type="button" class="btn btn-stop" id="btnStopTimer"><i class="fa-solid fa-pause"></i> Pause</button>
-                    <button type="button" class="btn btn-reset" id="btnResetTimer"><i class="fa-solid fa-rotate-left"></i> Reset</button>
-                </div>
-            </div>
-            <div class="form-grid" style="margin-top: 15px;">
-                <div class="form-group">
-                    <label for="durasiBaraDetik">Durasi Tercatat (Detik)</label>
-                    <input type="number" id="durasiBaraDetik" class="form-control score-input" readonly value="0">
-                </div>
-                <div class="form-group">
-                    <label for="skorBara">Skor Nyala Bara (0-100)</label>
-                    <input type="number" id="skorBara" class="form-control score-input" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="skor5r">Skor Kerapihan / 5R (0-100)</label>
-                    <input type="number" id="skor5r" class="form-control score-input" min="0" max="100" value="0">
-                </div>
-            </div>
-        </div>
-
-        <!-- Babak 3 -->
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-smog"></i> Babak 3: Dupa & Sikap
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="skorDupa">Skor Asap Dupa (0-100)</label>
-                    <input type="number" id="skorDupa" class="form-control score-input" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="skorSikap">Skor Sikap & Busana (0-100)</label>
-                    <input type="number" id="skorSikap" class="form-control score-input" min="0" max="100" value="0">
-                </div>
-            </div>
-        </div>
-
-        <!-- Ringkasan Total & Submit -->
-        <div class="card score-total-card">
-            <div style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px;">AKUMULASI SKOR AKHIR</div>
-            <div class="total-score-val" id="displaySkorAkhir">0.00</div>
-            <div style="margin-top: 20px;">
-                <button type="submit" class="btn btn-submit" id="btnSubmitData">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> SIMPAN & UPLOAD HASIL LOMBA
+        <!-- BABAK II -->
+        <div id="babak2" class="tab-content">
+            <div id="b2-start-wrapper" style="text-align: center; background: white; padding: 35px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--accent-orange);">
+                <h3 style="margin-top: 0; color: var(--primary-navy); font-size: 20px;">🔥 Sesi Penilaian Pembakaran Bara</h3>
+                <p style="color: #64748b; font-size: 14px; max-width: 500px; margin: 8px auto 25px auto;">
+                    Klik tombol di bawah saat sesi pembakaran bara dimulai secara serentak untuk mengaktifkan stopwatch & form penilaian paroki.
+                </p>
+                <button type="button" class="btn-start" style="max-width: 320px; font-size: 17px; padding: 16px; margin: 0 auto; background: linear-gradient(135deg, var(--accent-orange), #e63946);" onclick="mulaiTimerBabak2()">
+                    ▶️ MULAI STOPWATCH BARA
                 </button>
             </div>
-        </div>
-    </form>
 
-    <!-- Footer & Social Icons -->
-    <footer>
-        <div>
-            <span class="badge badge-leonard">
-                <i class="fa-solid fa-shield-halved"></i> Badge Official: Leonard Raditya
-            </span>
+            <!-- Warm & Cheerful Live Stopwatch Banner -->
+            <div id="b2-timer-box" style="display: none; background: linear-gradient(135deg, #f77f00, #e63946); color: white; padding: 18px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(247, 127, 0, 0.3);">
+                <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fef08a; background: rgba(0,0,0,0.15); padding: 4px 12px; border-radius: 12px; display: inline-block;">⏱️ Live Stopwatch Pembakaran Bara</span>
+                <div id="b2-stopwatch-clock" style="font-size: 42px; font-weight: 800; font-family: 'Courier New', Courier, monospace; color: #ffffff; margin-top: 6px; text-shadow: 0 2px 6px rgba(0,0,0,0.2);">00:00</div>
+            </div>
+
+            <!-- Cards Penilaian Babak 2 -->
+            <div id="b2-cards-grid" class="grid-penilaian" style="display: none;">
+                <script>
+                    for(let i=1; i<=4; i++) {
+                        document.write(`
+                            <div class="card-babak card-p-${i}">
+                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="txt-nama-${i}">Paroki ${i}</span>
+                                    <span id="badge_status_waktu_${i}" style="font-size: 11px; padding: 4px 8px; border-radius: 12px; background: #e2e8f0; color: #64748b; font-weight: bold;">⏳ Berjalan...</span>
+                                </div>
+
+                                <div class="card-section-bottom" style="margin-bottom: 15px; background: #f8fafc; text-align: center;">
+                                    <div style="font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px;">Durasi Waktu Selesai</div>
+                                    <div id="val_waktu_txt_${i}" style="font-size: 20px; font-weight: 800; color: var(--accent-blue); font-family: monospace; margin-bottom: 10px;">00:00</div>
+                                    
+                                    <button type="button" id="btn_stop_waktu_${i}" class="btn-rebutan-benar" style="background: var(--accent-pink); color: white; border: none; margin-bottom: 0;" onclick="stopWaktuParoki(${i})">
+                                        ⏹️ Selesai / Stop Waktu
+                                    </button>
+                                </div>
+
+                                <input type="hidden" id="waktu_${i}" value="450">
+
+                                <div class="form-group">
+                                    <label>Nyala Bara <span id="val_bara_${i}">50</span></label>
+                                    <input type="range" id="bara_${i}" min="1" max="100" value="50" oninput="document.getElementById('val_bara_${i}').innerText=this.value">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Manajemen 5R <span id="val_5r_${i}">50</span></label>
+                                    <input type="range" id="5r_${i}" min="1" max="100" value="50" oninput="document.getElementById('val_5r_${i}').innerText=this.value">
+                                </div>
+                            </div>
+                        `);
+                    }
+                </script>
+            </div>
         </div>
-        <div class="social-links">
-            <a href="https://instagram.com" target="_blank" class="social-icon ig" title="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-            <a href="https://wa.me/" target="_blank" class="social-icon wa" title="WhatsApp">
-                <i class="fa-brands fa-whatsapp"></i>
-            </a>
+
+        <!-- BABAK III -->
+        <div id="babak3" class="tab-content">
+            <div class="grid-penilaian">
+                <script>
+                    for(let i=1; i<=4; i++) {
+                        document.write(`
+                            <div class="card-babak card-p-${i}">
+                                <div class="card-header"><span class="txt-nama-${i}">Paroki ${i}</span></div>
+                                <div class="form-group">
+                                    <label>Teknik Pendupaan <span id="val_dupa_${i}">50</span></label>
+                                    <input type="range" id="dupa_${i}" min="1" max="100" value="50" oninput="document.getElementById('val_dupa_${i}').innerText=this.value">
+                                </div>
+                                <div class="form-group">
+                                    <label>Gestur / Sikap Liturgis <span id="val_sikap_${i}">50</span></label>
+                                    <input type="range" id="sikap_${i}" min="1" max="100" value="50" oninput="document.getElementById('val_sikap_${i}').innerText=this.value">
+                                </div>
+                            </div>
+                        `);
+                    }
+                </script>
+            </div>
         </div>
-    </footer>
+
+        <!-- SUBMIT BUTTON -->
+        <div class="submit-container">
+            <button class="btn-submit" id="btnGsheet" onclick="uploadKeSpreadsheet(); prosesSubmitOtomatis()">🔒 KUNCI & SUBMIT HASIL AKHIR</button>
+        
+        </div>
+
+        <!-- REKAP HASIL -->
+        <div id="kotak_hasil" class="hasil-box">
+            <div id="area_foto" class="table-container-capture">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <img src="logo.png" alt="Logo TAPA 2026" style="height: 50px; border-radius: 6px;" onerror="this.style.display='none'">
+                    <div>
+                        <h3 style="margin: 0; color: var(--primary-navy);">🏆 Rekapitulasi Hasil Lomba Wiruk</h3>
+                        <p style="margin: 2px 0 0 0; font-size: 11px; color: #64748b;">TAPA 2026 Official Scorecard</p>
+                    </div>
+                </div>
+                
+                <div id="info_rekap" style="font-size: 13px; color: #334155; margin-bottom: 12px; line-height: 1.5;"></div>
+                
+                <table class="table-hasil">
+                    <thead>
+                        <tr>
+                            <th>Peringkat</th>
+                            <th>Nama Paroki</th>
+                            <th>Teori (30%)</th>
+                            <th>Bara (15%)</th>
+                            <th>Waktu (15%)</th>
+                            <th>5R (10%)</th>
+                            <th>Pendupaan (20%)</th>
+                            <th>Sikap (10%)</th>
+                            <th>Total Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body_tabel_hasil"></tbody>
+                </table>
+            </div>
+
+            <div class="action-rekap-box">
+                <button class="btn-action-download" onclick="unduhGambarRekapManual()">💾 Unduh Gambar Rekap</button>
+                <button class="btn-action-wa" onclick="kirimPesanWAManual()">📲 Kirim Ke WhatsApp Admin</button>
+            </div>
+        </div>
+
+        <!-- FOOTER WEB -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="https://instagram.com/tapa26_barto/" target="_blank" class="footer-icon-link" title="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/6287730071998" target="_blank" class="footer-icon-link" title="WhatsApp Admin">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                </div>
+                <div class="footer-credit">
+                    © 2026 TAPA - by <strong>Leonard Raditya</strong>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
 </div>
 
-<div id="toast" class="toast">Data berhasil disimpan!</div>
-
 <script>
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRBjtYN5m1AZaEnRYiOi4YPGtXF5QpKV4TBXCxrvwI2h0VCz2ZEXvxrb582_Girz3p/exec';
+// ==========================================
+// GLOBAL STATE & FLAGS LOCK
+// ==========================================
+let selectedRebutanParoki = null;
+let dataPelanggaran = { 1: 0, 2: 0, 3: 0, 4: 0 };
+let globalHasilData = [];
+let globalBlobURL = null;
+let globalPesanWA = "";
+let globalNamaJuri = "";
 
-    const selectJuri = document.getElementById('selectJuri');
-    const textNamaJuri = document.getElementById('textNamaJuri');
-    const badgeEdit = document.getElementById('badgeEdit');
-    const displaySkorAkhir = document.getElementById('displaySkorAkhir');
-    const scoresheetForm = document.getElementById('scoresheetForm');
-    const btnSubmitData = document.getElementById('btnSubmitData');
+// Stopwatch State Babak 2
+let timerBabak2Interval = null;
+let detikBerjalanBabak2 = 0;
+let waktuParokiSelesai = { 1: null, 2: null, 3: null, 4: null };
 
-    // Stopwatch Logic
-    let timerInterval = null, startTime = 0, elapsedTime = 0, isRunning = false;
-    const stopwatchDisplay = document.getElementById('stopwatchDisplay');
-    const durasiBaraInput = document.getElementById('durasiBaraDetik');
+// Lock Flags (Mencegah Double Click & Mutex Loop)
+let isUploadingGSheet = false;
+let isProcessingSubmit = false;
 
-    function formatTime(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        const tenths = Math.floor((ms % 1000) / 100);
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`;
-    }
+// URL AppScript GSheet
+const SCRIPT_URL_GSHEET = "https://script.google.com/macros/s/AKfycbzMRWkKj6-939aHruUncOCkziH9qNsl7wM9KboYraKtPLDt1cFF5haZTbHmu8VmoVkj/exec";
 
-    function updateTimer() {
-        const now = Date.now();
-        elapsedTime = now - startTime;
-        stopwatchDisplay.textContent = formatTime(elapsedTime);
-        durasiBaraInput.value = Math.floor(elapsedTime / 1000);
-        hitungTotalSkor();
-    }
+// ==========================================
+// SETUP & TAMPILAN
+// ==========================================
+function toggleInputParoki() {
+    let jml = document.getElementById("input_jumlah_paroki").value;
+    document.getElementById("box_input_p4").style.display = (jml === "3") ? "none" : "flex";
+}
 
-    document.getElementById('btnStartTimer').addEventListener('click', () => {
-        if (!isRunning) {
-            isRunning = true;
-            startTime = Date.now() - elapsedTime;
-            timerInterval = setInterval(updateTimer, 100);
+function simpanDataDanMulai(e) {
+    if (e) e.preventDefault();
+
+    let namaJuri = document.getElementById("input_nama_juri").value.trim();
+    let jmlPeserta = parseInt(document.getElementById("input_jumlah_paroki").value);
+
+    document.getElementById("display_juri_name").innerText = namaJuri || "Juri Tanpa Nama";
+
+    for (let i = 1; i <= 4; i++) {
+        let namaParoki = document.getElementById(`input_p${i}`).value.trim() || `Paroki ${i}`;
+        let elements = document.getElementsByClassName(`txt-nama-${i}`);
+        for (let j = 0; j < elements.length; j++) {
+            elements[j].innerText = namaParoki;
         }
-    });
 
-    document.getElementById('btnStopTimer').addEventListener('click', () => {
-        if (isRunning) {
-            isRunning = false;
-            clearInterval(timerInterval);
-            triggerEditStatus('Di-pause');
-        }
-    });
-
-    document.getElementById('btnResetTimer').addEventListener('click', () => {
-        isRunning = false;
-        clearInterval(timerInterval);
-        elapsedTime = 0;
-        stopwatchDisplay.textContent = '00:00.0';
-        durasiBaraInput.value = 0;
-        hitungTotalSkor();
-        triggerEditStatus('Mode Edit');
-    });
-
-    // Badge status update
-    selectJuri.addEventListener('change', (e) => {
-        textNamaJuri.textContent = e.target.value || 'Belum Dipilih';
-        triggerEditStatus('Mode Edit');
-    });
-
-    function triggerEditStatus(statusText = 'Mode Edit', isSaved = false) {
-        if (isSaved) {
-            badgeEdit.className = 'badge badge-edit saved';
-            badgeEdit.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${statusText}`;
-        } else {
-            badgeEdit.className = 'badge badge-edit';
-            badgeEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> ${statusText}`;
+        let kartuList = document.getElementsByClassName(`card-p-${i}`);
+        for (let k = 0; k < kartuList.length; k++) {
+            kartuList[k].style.display = (i > jmlPeserta) ? "none" : "block";
         }
     }
 
-    // Skor Calculation
-    const scoreInputs = document.querySelectorAll('.score-input, #selectJuri, #namaParoki');
+    document.getElementById("screen-setup").style.display = "none";
+    document.getElementById("screen-scoresheet").style.display = "block";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    function hitungTotalSkor() {
-        const bowl = parseFloat(document.getElementById('skorBowl').value) || 0;
-        const rebutan = parseFloat(document.getElementById('skorRebutan').value) || 0;
-        const pelanggaran = parseFloat(document.getElementById('pelanggaran').value) || 0;
-        const bara = parseFloat(document.getElementById('skorBara').value) || 0;
-        const skor5r = parseFloat(document.getElementById('skor5r').value) || 0;
-        const dupa = parseFloat(document.getElementById('skorDupa').value) || 0;
-        const sikap = parseFloat(document.getElementById('skorSikap').value) || 0;
+function kembaliKeSetup() {
+    document.getElementById("screen-scoresheet").style.display = "none";
+    document.getElementById("screen-setup").style.display = "block";
+}
 
-        const total = (bowl + rebutan - pelanggaran) + bara + skor5r + dupa + sikap;
-        displaySkorAkhir.textContent = total.toFixed(2);
+function bukaBabak(btnElemen, babakId) {
+    let tabcontent = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabcontent.length; i++) tabcontent[i].classList.remove("active");
+    
+    let tablinks = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+    
+    document.getElementById(babakId).classList.add("active");
+    btnElemen.classList.add("active");
+}
+
+// ==========================================
+// LOGIC STOPWATCH BABAK II
+// ==========================================
+function mulaiTimerBabak2() {
+    document.getElementById("b2-start-wrapper").style.display = "none";
+    document.getElementById("b2-timer-box").style.display = "block";
+    document.getElementById("b2-cards-grid").style.display = "grid";
+
+    detikBerjalanBabak2 = 0;
+    if (timerBabak2Interval) clearInterval(timerBabak2Interval);
+
+    timerBabak2Interval = setInterval(() => {
+        detikBerjalanBabak2++;
+        let m = Math.floor(detikBerjalanBabak2 / 60);
+        let s = detikBerjalanBabak2 % 60;
+        let strClock = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        document.getElementById("b2-stopwatch-clock").innerText = strClock;
+
+        for (let i = 1; i <= 4; i++) {
+            if (waktuParokiSelesai[i] === null) {
+                document.getElementById(`val_waktu_txt_${i}`).innerText = strClock;
+                document.getElementById(`waktu_${i}`).value = detikBerjalanBabak2;
+            }
+        }
+    }, 1000);
+}
+
+function stopWaktuParoki(i) {
+    if (waktuParokiSelesai[i] !== null) return;
+
+    waktuParokiSelesai[i] = detikBerjalanBabak2;
+    document.getElementById(`waktu_${i}`).value = detikBerjalanBabak2;
+
+    let m = Math.floor(detikBerjalanBabak2 / 60);
+    let s = detikBerjalanBabak2 % 60;
+    let strWaktu = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+
+    document.getElementById(`val_waktu_txt_${i}`).innerText = strWaktu;
+    
+    let btn = document.getElementById(`btn_stop_waktu_${i}`);
+    if (btn) {
+        btn.disabled = true;
+        btn.style.background = "#94a3b8";
+        btn.style.cursor = "not-allowed";
+        btn.innerHTML = "✓ Waktu Terkunci";
     }
 
-    scoreInputs.forEach(input => {
-        input.addEventListener('input', () => {
-            hitungTotalSkor();
-            triggerEditStatus('Mode Edit');
+    let badge = document.getElementById(`badge_status_waktu_${i}`);
+    if (badge) {
+        badge.innerText = "✓ Selesai (" + strWaktu + ")";
+        badge.style.background = "var(--accent-green)";
+        badge.style.color = "#ffffff";
+    }
+}
+
+// ==========================================
+// LOGIC REBUTAN & PELANGGARAN
+// ==========================================
+function toggleRebutanBenar(parokiIdx) {
+    if (selectedRebutanParoki === parokiIdx) {
+        selectedRebutanParoki = null;
+    } else {
+        selectedRebutanParoki = parokiIdx;
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        let btn = document.getElementById(`btn_rebutan_${i}`);
+        let icon = document.getElementById(`icon_rebutan_${i}`);
+        
+        if (btn && icon) {
+            if (i === selectedRebutanParoki) {
+                btn.classList.add('active');
+                icon.innerText = "✓";
+            } else {
+                btn.classList.remove('active');
+                icon.innerText = "◯";
+            }
+        }
+    }
+}
+
+function ubahPelanggaran(parokiIdx, delta) {
+    dataPelanggaran[parokiIdx] = Math.max(0, (dataPelanggaran[parokiIdx] || 0) + delta);
+    let el = document.getElementById(`val_pelanggaran_${parokiIdx}`);
+    if (el) el.innerText = dataPelanggaran[parokiIdx];
+}
+
+// ==========================================
+// SUBMIT & PROSES HASIL
+// ==========================================
+function prosesSubmitOtomatis() {
+    if (isProcessingSubmit) return;
+    isProcessingSubmit = true;
+
+    let jumlahPeserta = parseInt(document.getElementById("input_jumlah_paroki").value) || 4;
+    globalNamaJuri = document.getElementById("input_nama_juri").value.trim() || "Juri Tanpa Nama";
+    let waktuSekarang = new Date().toLocaleString('id-ID');
+    globalHasilData = [];
+
+    for (let i = 1; i <= jumlahPeserta; i++) {
+        let nama = document.getElementById(`input_p${i}`).value.trim() || `Paroki ${i}`;
+        
+        let skorBowl = (parseFloat(document.getElementById(`bowl_${i}`).value))*75/100 || 0;
+        let poinRebutan = (selectedRebutanParoki === i) ? 25 : 0;
+        let penalti = (dataPelanggaran[i] || 0) * 10;
+        
+        let skorTeori = Math.max(0, skorBowl + poinRebutan - penalti);
+
+        let skorBara = parseFloat(document.getElementById(`bara_${i}`).value) || 0;
+        let totalDetikWaktu = parseInt(document.getElementById(`waktu_${i}`).value) || 0;
+        let skor5R = parseFloat(document.getElementById(`5r_${i}`).value) || 0;
+        let skorWaktu = (totalDetikWaktu < 480 && totalDetikWaktu > 0) ? 100 : 90;
+
+        let skorDupa = parseFloat(document.getElementById(`dupa_${i}`).value) || 0;
+        let skorSikap = parseFloat(document.getElementById(`sikap_${i}`).value) || 0;
+
+        // FORMULA BOBOT: Teori 30%, Bara 15%, Waktu 15%, 5R 10%, Pendupaan 20%, Sikap 10%
+        let totalNilai = (skorTeori * 0.30) + (skorBara * 0.15) + (skorWaktu * 0.15) + (skor5R * 0.10) + (skorDupa * 0.20) + (skorSikap * 0.10);
+
+        let m = Math.floor(totalDetikWaktu / 60);
+        let s = totalDetikWaktu % 60;
+        let stringWaktu = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+
+        globalHasilData.push({
+            nama: nama, teori: skorTeori, bara: skorBara, waktu: skorWaktu, mmss: stringWaktu, m5r: skor5R, dupa: skorDupa, sikap: skorSikap, total: totalNilai
         });
-    });
-
-    // Upload to Google Sheets
-    scoresheetForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const juriName = selectJuri.value;
-        const parokiName = document.getElementById('namaParoki').value;
-
-        if (!juriName || !parokiName) {
-            alert('Harap lengkapi Nama Juri dan Nama Paroki terlebih dahulu!');
-            return;
-        }
-
-        const payload = {
-            timestamp: new Date().toLocaleString('id-ID'),
-            nama_juri: juriName,
-            nama_paroki: parokiName,
-            no_urut: document.getElementById('noUrut').value || '-',
-            skor_bowl: parseFloat(document.getElementById('skorBowl').value) || 0,
-            skor_rebutan: parseFloat(document.getElementById('skorRebutan').value) || 0,
-            pelanggaran: parseFloat(document.getElementById('pelanggaran').value) || 0,
-            durasi_bara: parseInt(durasiBaraInput.value) || 0,
-            skor_bara: parseFloat(document.getElementById('skorBara').value) || 0,
-            skor_5r: parseFloat(document.getElementById('skor5r').value) || 0,
-            skor_dupa: parseFloat(document.getElementById('skorDupa').value) || 0,
-            skor_sikap: parseFloat(document.getElementById('skorSikap').value) || 0,
-            skor_akhir: parseFloat(displaySkorAkhir.textContent) || 0
-        };
-
-        btnSubmitData.disabled = true;
-        btnSubmitData.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> MENGIRIM KE GOOGLE SHEETS...`;
-
-        try {
-            await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
-            });
-
-            showToast('✅ Data berhasil dikirim ke Google Sheets!');
-            triggerEditStatus('Tersimpan di GSheet', true);
-        } catch (error) {
-            console.error('Submit Error:', error);
-            showToast('✅ Permintaan dikirim ke Google Sheets');
-            triggerEditStatus('Tersimpan', true);
-        } finally {
-            btnSubmitData.disabled = false;
-            btnSubmitData.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SIMPAN & UPLOAD HASIL LOMBA`;
-        }
-    });
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.textContent = msg;
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3500);
     }
 
-    hitungTotalSkor();
+    globalHasilData.sort((a, b) => b.total - a.total);
+
+    let htmlTabel = "";
+    globalHasilData.forEach((data, index) => {
+        let kelasRank = (index === 0) ? "class='rank-1'" : "";
+        htmlTabel += `
+            <tr ${kelasRank}>
+                <td>${index + 1}</td>
+                <td style="text-align: left; font-weight: bold;">${data.nama}</td>
+                <td>${data.teori.toFixed(1)}</td>
+                <td>${data.bara}</td>
+                <td>${data.waktu} (${data.mmss})</td>
+                <td>${data.m5r}</td>
+                <td>${data.dupa}</td>
+                <td>${data.sikap}</td>
+                <td style="font-size: 15px; font-weight: bold; color: var(--accent-pink);">${data.total.toFixed(2)}</td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("body_tabel_hasil").innerHTML = htmlTabel;
+    document.getElementById("info_rekap").innerHTML = `👤 <b>Juri:</b> ${globalNamaJuri} | ⏱️ <b>Timestamp:</b> ${waktuSekarang}`;
+    
+    let kotakHasil = document.getElementById("kotak_hasil");
+    if (kotakHasil) {
+        kotakHasil.style.display = "block";
+        kotakHasil.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Format Pesan WhatsApp
+    let nomorWA = "6287780386016"; 
+    globalPesanWA = `🏆 *REKAP HASIL PENILAIAN LOMBA WIRUK (TAPA 2026)* 🏆\n`;
+    globalPesanWA += `👤 *Nama Juri:* ${globalNamaJuri}\n`;
+    globalPesanWA += `⏱️ *Timestamp:* ${waktuSekarang}\n`;
+    globalPesanWA += `==================================\n\n`;
+    
+    globalHasilData.forEach((data, index) => {
+        let medali = (index === 0) ? "🥇 " : (index === 1) ? "🥈 " : (index === 2) ? "🥉 " : "• ";
+        globalPesanWA += `${medali}*PERINGKAT ${index + 1}: ${data.nama.toUpperCase()}*\n`;
+        globalPesanWA += `   👉 *TOTAL SKOR AKHIR: ${data.total.toFixed(2)}*\n`;
+        globalPesanWA += `----------------------------------\n`;
+    });
+    globalPesanWA += `\n_Catatan: File rekap JPG telah terunduh otomatis. Mohon lampirkan gambar tersebut pada chat ini._`;
+
+    // Jalankan eksekusi terpisah (Non-Recursive)
+    setTimeout(() => {
+        autoGenerateImageAndRedirectWA(nomorWA);
+        uploadKeSpreadsheet(); 
+        isProcessingSubmit = false;
+    }, 400);
+}
+
+// ==========================================
+// FIX: AUTOMATIC IMAGE & WHATSAPP REDIRECT
+// ==========================================
+function autoGenerateImageAndRedirectWA(nomorWA) {
+    let targetArea = document.getElementById("area_foto");
+    let urlWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(globalPesanWA)}`;
+    
+    // PERBAIKAN: Buka tab WhatsApp di awal untuk hindari popup blocker
+    let waWindow = window.open("about:blank", "_blank");
+
+    html2canvas(targetArea, { 
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+        imageTimeout: 1500
+    }).then(canvas => {
+        canvas.toBlob(function(blob) {
+            if (blob) {
+                globalBlobURL = URL.createObjectURL(blob);
+                
+                let linkUnduh = document.createElement("a");
+                let cleanJuriName = globalNamaJuri.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                linkUnduh.download = `Rekap_Wiruk_${cleanJuriName}_${Date.now()}.jpg`;
+                linkUnduh.href = globalBlobURL;
+                document.body.appendChild(linkUnduh);
+                linkUnduh.click();
+                document.body.removeChild(linkUnduh);
+            }
+            
+            // PERBAIKAN: Hanya ubah lokasi tab baru. TAB UTAMA TIDAK AKAN PERNAH DIALIHKAN
+            if (waWindow && !waWindow.closed) {
+                waWindow.location.href = urlWA;
+            }
+        }, 'image/jpeg', 0.95);
+    }).catch(err => {
+        console.error("Gagal membuat screenshot:", err);
+        if (waWindow && !waWindow.closed) {
+            waWindow.location.href = urlWA;
+        }
+    });
+}
+
+// ==========================================
+// UTILITAS MANUAL
+// ==========================================
+function unduhGambarRekapManual() {
+    let targetArea = document.getElementById("area_foto");
+    html2canvas(targetArea, { scale: 2, useCORS: true, allowTaint: false }).then(canvas => {
+        canvas.toBlob(function(blob) {
+            if (blob) {
+                let url = URL.createObjectURL(blob);
+                let link = document.createElement("a");
+                link.download = `Rekap_Wiruk_${Date.now()}.jpg`;
+                link.href = url;
+                link.click();
+            }
+        }, 'image/jpeg', 0.95);
+    });
+}
+
+function kirimPesanWAManual() {
+    let nomorWA = "6287780386016";
+    let urlWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(globalPesanWA)}`;
+    window.open(urlWA, "_blank");
+}
+
+// ==========================================
+// FIX: UPLOAD GOOGLE SPREADSHEET (NO RECURSION)
+// ==========================================
+async function uploadKeSpreadsheet() {
+    // 1. Jika sedang proses upload, hentikan (mencegah double upload)
+    if (isUploadingGSheet) return;
+
+    // 2. Cek apakah data sudah ada (TIDAK memanggil prosesSubmitOtomatis lagi untuk mencegah mutex loop)
+    if (!globalHasilData || globalHasilData.length === 0) {
+        // alert("⚠️ Belum ada data hasil penilaian yang diproses!");
+        return;
+    }
+
+    isUploadingGSheet = true;
+
+    const btn = document.getElementById("btnGsheet");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "⏳ Memproses Upload...";
+    }
+
+    let waktuSekarang = new Date().toLocaleString('id-ID');
+
+    const payload = {
+        juri: globalNamaJuri || "Juri Tanpa Nama",
+        timestamp: waktuSekarang,
+        data: globalHasilData.map((item, index) => ({
+            peringkat: index + 1,
+            namaParoki: item.nama,
+            teori: item.teori.toFixed(1),
+            bara: item.bara,
+            waktu: `${item.waktu} (${item.mmss})`,
+            r5: item.m5r,
+            pendupaan: item.dupa,
+            sikap: item.sikap,
+            totalSkor: item.total.toFixed(2)
+        }))
+    };
+
+    try {
+        await fetch(SCRIPT_URL_GSHEET, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        console.log("✅ Payload berhasil dikirim ke Google Apps Script.");
+
+    } catch (error) {
+        console.error("Gagal Upload Spreadsheet:", error);
+        alert("❌ Terjadi kesalahan saat mengunggah data.");
+    } finally {
+        isUploadingGSheet = false;
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = "📊 Upload ke Spreadsheet";
+        }
+    }
+}
 </script>
+
 </body>
 </html>
