@@ -876,47 +876,48 @@ function prosesSubmitOtomatis() {
     }, 400);
 }
 
-function autoGenerateImageAndRedirectWA(nomorWA) {
-    let targetArea = document.getElementById("area_foto");
+    // note out dulu lagi cobain ke spreadsheet
+// function autoGenerateImageAndRedirectWA(nomorWA) {
+//     let targetArea = document.getElementById("area_foto");
 
-    let waWindow = window.open("", "_blank");
-    let urlWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(globalPesanWA)}`;
+//     let waWindow = window.open("", "_blank");
+//     let urlWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(globalPesanWA)}`;
 
-    html2canvas(targetArea, { 
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        logging: false,
-        imageTimeout: 1500
-    }).then(canvas => {
-        canvas.toBlob(function(blob) {
-            if (blob) {
-                globalBlobURL = URL.createObjectURL(blob);
+//     html2canvas(targetArea, { 
+//         scale: 2,
+//         useCORS: true,
+//         allowTaint: false,
+//         logging: false,
+//         imageTimeout: 1500
+//     }).then(canvas => {
+//         canvas.toBlob(function(blob) {
+//             if (blob) {
+//                 globalBlobURL = URL.createObjectURL(blob);
                 
-                let linkUnduh = document.createElement("a");
-                let cleanJuriName = globalNamaJuri.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                linkUnduh.download = `Rekap_Wiruk_${cleanJuriName}_${Date.now()}.jpg`;
-                linkUnduh.href = globalBlobURL;
-                document.body.appendChild(linkUnduh);
-                linkUnduh.click();
-                document.body.removeChild(linkUnduh);
-            }
+//                 let linkUnduh = document.createElement("a");
+//                 let cleanJuriName = globalNamaJuri.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+//                 linkUnduh.download = `Rekap_Wiruk_${cleanJuriName}_${Date.now()}.jpg`;
+//                 linkUnduh.href = globalBlobURL;
+//                 document.body.appendChild(linkUnduh);
+//                 linkUnduh.click();
+//                 document.body.removeChild(linkUnduh);
+//             }
 
-            if (waWindow && !waWindow.closed) {
-                waWindow.location.href = urlWA;
-            } else {
-                window.location.href = urlWA;
-            }
-        }, 'image/jpeg', 0.95);
-    }).catch(err => {
-        console.error("Gagal membuat screenshot:", err);
-        if (waWindow && !waWindow.closed) {
-            waWindow.location.href = urlWA;
-        } else {
-            window.location.href = urlWA;
-        }
-    });
-}
+//             if (waWindow && !waWindow.closed) {
+//                 waWindow.location.href = urlWA;
+//             } else {
+//                 window.location.href = urlWA;
+//             }
+//         }, 'image/jpeg', 0.95);
+//     }).catch(err => {
+//         console.error("Gagal membuat screenshot:", err);
+//         if (waWindow && !waWindow.closed) {
+//             waWindow.location.href = urlWA;
+//         } else {
+//             window.location.href = urlWA;
+//         }
+//     });
+// }
 
 function unduhGambarRekapManual() {
     let targetArea = document.getElementById("area_foto");
@@ -938,6 +939,51 @@ function kirimPesanWAManual() {
     let urlWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(globalPesanWA)}`;
     window.open(urlWA, "_blank");
 }
+
+// ini untuk coba ke spreadsheet
+    // Ganti dengan Web App URL yang Anda salin di Langkah 3
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRBjtYN5m1AZaEnRYiOi4YPGtXF5QpKV4TBXCxrvwI2h0VCz2ZEXvxrb582_Girz3p/exec';
+
+async function simpanKeGoogleSheets(payload) {
+  try {
+    // Mengirim HTTP POST request ke Google Apps Script
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      // Menggunakan text/plain mencegah isu CORS Preflight di browser
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'success') {
+      alert('✅ Nilai berhasil tersimpan ke Google Sheets!');
+    } else {
+      alert('❌ Gagal menyimpan: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('⚠️ Terjadi kesalahan koneksi saat menyimpan data.');
+  }
+}
+
+// Contoh trigger event saat Form Submit diklik oleh Juri
+document.getElementById('formScoresheet').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // Kumpulkan data dari input HTML
+  const dataPenilaian = {
+    nama_juri: document.getElementById('namaJuri').value,
+    nama_paroki: document.getElementById('namaParoki').value,
+    skor_bowl: parseFloat(document.getElementById('skorBowl').value) || 0,
+    skor_bara: parseFloat(document.getElementById('skorBara').value) || 0,
+    skor_dupa: parseFloat(document.getElementById('skorDupa').value) || 0,
+    skor_sikap: parseFloat(document.getElementById('skorSikap').value) || 0,
+    skor_akhir: parseFloat(document.getElementById('skorAkhir').innerText) || 0
+  };
+
+  simpanKeGoogleSheets(dataPenilaian);
+});
 </script>
 
 </body>
